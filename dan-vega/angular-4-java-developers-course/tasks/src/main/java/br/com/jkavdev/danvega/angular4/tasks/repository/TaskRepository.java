@@ -1,5 +1,9 @@
 package br.com.jkavdev.danvega.angular4.tasks.repository;
 
-public interface TaskRepository {
+import org.springframework.data.repository.CrudRepository;
+
+import br.com.jkavdev.danvega.angular4.tasks.domain.Task;
+
+public interface TaskRepository extends CrudRepository<Task, Long> {
 
 }
