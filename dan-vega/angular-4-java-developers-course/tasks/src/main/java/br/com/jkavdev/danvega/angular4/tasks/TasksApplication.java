@@ -1,4 +1,4 @@
-package br.com.jkavdev.danvega.angular4.tasks.tasks;
+package br.com.jkavdev.danvega.angular4.tasks;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
