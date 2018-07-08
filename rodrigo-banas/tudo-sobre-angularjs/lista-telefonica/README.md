@@ -42,3 +42,108 @@
 			$scope.contatos.push(angular.copy(contato));
 			delete $scope.contato;
 		}
+
+* disabilitando o botao de adicionar antes que os dados obrigatorios forem preenchidos
+* com `ng-disabled="!contato.nome || !contato.telefone"` 
+
+		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar Contato</button>
+
+* removendo um contato
+* adicionando um input que indicara o selecionado `ng-model="contato.selecionado"`
+
+		<td><input type="checkbox" ng-model="contato.selecionado" /></td>
+
+* criando o botao para remover
+
+		<button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)">Apagar Contato</button>
+
+* funcao de remocao dos contatos
+* aqui realizamos uma filtragem dos dados, retornando apenas os nao selecionados
+
+		$scope.apagarContato = function (contatos) {
+			$scope.contatos = contatos.filter(function (contato) {
+				if (!contato.selecionado) return contato;
+			});
+		}
+
+* disabilitando o botao de remocao caso nenhum contato selecionado
+
+		<button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Apagar Contato</button>
+
+* funcao de verificacao de selecionado
+* retornara true caso algum esteja selecionado
+
+		$scope.isContatoSelecionado = function (contatos) {
+			return contatos.some(function (contato) {
+				return contato.selecionado;
+			});
+		}
+
+* adicionando um options de operadora
+* `operadora in operadoras` indicando de onde vem os dados
+* `operadora.nome for operadora in operadoras` dando um nome para escolher no options
+* `operadora.codigo as operadora.nome for operadora in operadoras` indicando o valor a ser enviado quando selecionado
+* `operadora.nome group by operadora.categoria for operadora in operadoras` indicando que os valores seram agrupados pela categoria
+* `<option value="">Selecione uma operadora</option>` adicionando um valor padrao ao options
+
+		<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">
+            <option value="">Selecione uma operadora</option>
+        </select>
+
+* arrays de operadoras
+
+		$scope.operadoras = [
+			{ nome: 'Vivo', codigo: 14, categoria: 'Celular' },
+			.........
+		]
+
+* exibindo apenas o nome da operadora
+
+		<td>{{contato.operadora.nome}}</td>
+
+* alterando estilo dinamicamente, quando selecionar um contato
+* `ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}"` indicando que seram adicionados as classes de css, caso o contato esteja selecionado
+
+	<tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos">
+		<td>
+			<input type="checkbox" ng-model="contato.selecionado" />
+		</td>
+	</tr>
+
+* estilo a ser aplicado
+
+		.selecionado {
+            background-color: yellow;
+        }
+
+        .negrito {
+            font-weight: bold;
+        }
+
+* aplicado valores de estilo dinamicamente, teremos uma cor que virar com o contato, e aplicado a um campo
+* com `ng-style="{'background-color': contato.cor}"` indicamos que teremos um cor para o estilo `background-color`
+
+		<td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
+
+* contatos com as cores
+
+		$scope.contatos = [
+			{ nome: 'Jhonatan', telefone: '12345678', cor: 'blue' },
+			{ nome: 'Lucas', telefone: '12344618', cor: 'black' },
+			{ nome: 'Maria', telefone: '12345615', cor: 'red' },
+		];
+
+* renderizacao de componentes, com ngIf, ngShow, ngHide
+* exibindo a tabelas apenas quando tiver elementos
+* com `ng-show="contatos.length > 0"` o html ficara apenas com display:none, sendo possivel acessa-lo atraves do html gerado
+
+		<table class="table table-striped" ng-show="contatos.length > 0">
+
+* com `ng-if="contatos.length > 0"` o html nao eh gerado, nao sendo possivel acessa-lo, caso de falso a expressao
+
+		<button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!isContatoSelecionado(contatos)" ng-if="contatos.length > 0">Apagar Contato</button>
+
+* realizando a inclusao de paginas html
+* com `ng-include="'footer.html'"` indicamos o caminho ate a imagem com `'caminho'`
+
+		<div ng-include="'footer.html'"></div>
