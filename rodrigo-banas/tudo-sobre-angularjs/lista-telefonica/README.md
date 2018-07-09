@@ -147,3 +147,67 @@
 * com `ng-include="'footer.html'"` indicamos o caminho ate a imagem com `'caminho'`
 
 		<div ng-include="'footer.html'"></div>
+
+* validando campos com `ngRequired`		
+* indicando que o campo eh obrigatorio `ng-required="true"`
+
+		<input type="text" ng-model="contato.nome" ng-required="true" />
+
+* para a validacao ser realizada o elemento deve esta contido em um form
+
+		<form name="contatoForm">
+            <input type="text" ng-model="contato.nome" ng-required="true" />
+			..................
+        </form>
+
+* teremos uma `div` que exibira o conteudo dos erros de acordo com os campos do formulario
+* podemos identificar os campos dando um nome para tal `name="nome"`
+* sera exibido caso o campo nome do formulario nao esteja preenchido `ng-show="contatoForm.nome.$invalid"`
+
+		<input type="text" ng-model="contato.nome" name="nome" ng-required="true" />
+
+		<div class="alert alert-danger" ng-show="contatoForm.nome.$invalid">
+            Preencha o nome!
+        </div>
+
+* exibindo varias mensagens de erro
+* como temos varios campos que podemos gerar erros, podemos acessalos da propriedade `$error` do `ngForm`
+
+		<form name="contatoForm">
+			<input type="text" class="form-control" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" />
+            <input type="text" class="form-control" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"
+                ng-pattern="/^\d{4,5}-\d{4}$/" />
+        </form>
+
+        <div class="alert alert-danger" ng-show="contatoForm.nome.$error.required && contatoForm.nome.$dirty">
+            Preencha o nome!
+        </div>
+        <div class="alert alert-danger" ng-show="contatoForm.nome.$error.minlength">
+            O campo nome deve conter no mínimo 10 caracteres!
+        </div>
+        <div class="alert alert-danger" ng-show="contatoForm.telefone.$error.required && contatoForm.telefone.$dirty">
+            Preencha o telefone!
+        </div>
+        <div class="alert alert-danger" ng-show="contatoForm.telefone.$error.pattern">
+            O campo telefone deve ter o formato DDDDD-DDDD!
+        </div>
+
+* utilizando o `ng-minlength="10"` para indicar o tamanho do campo
+
+		<input type="text" class="form-control" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" />
+
+* exibindo mensagem de erro sobre o tamanho to campo		
+
+		<div class="alert alert-danger" ng-show="contatoForm.nome.$error.minlength">
+            O campo nome deve conter no mínimo 10 caracteres!
+        </div>
+
+* utilizando o `ng-pattern="/^\d{4,5}-\d{4}$/"` para indicar um padrao para o campo de telefone
+
+		<input type="text" class="form-control" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+
+* exibindo mensagem de erro sobre o padrao to campo		
+
+		<div class="alert alert-danger" ng-show="contatoForm.telefone.$error.pattern">
+            O campo telefone deve ter o formato DDDDD-DDDD!
+        </div>
