@@ -211,3 +211,24 @@
 		<div class="alert alert-danger" ng-show="contatoForm.telefone.$error.pattern">
             O campo telefone deve ter o formato DDDDD-DDDD!
         </div>
+
+* adicionando modulo de mensagens do angularjs
+
+		<script src="js/angular/angular-messages.js"></script>
+
+* declarando como dependencias do modulo da aplicacao
+
+		angular.module("listaTelefonica", ["ngMessages"]);
+
+* utilizando modulo de mensagens
+* indicando de quem sera tratado os erros `ng-messages="contatoForm.nome.$error"`
+* `ng-message="required"` indicando qual erro a ser exibido
+
+		<div class="alert alert-danger" ng-messages="contatoForm.nome.$error">
+            <div ng-message="required" ng-show="contatoForm.nome.$dirty">
+                Preencha o nome!
+            </div>
+            <div ng-message="minlength">
+                O campo nome deve conter no mínimo 10 caracteres!
+            </div>
+        </div>
