@@ -232,3 +232,65 @@
                 O campo nome deve conter no mínimo 10 caracteres!
             </div>
         </div>
+
+# Filtros
+
+* indicando para o campo nome ficar em maiusculo
+
+		<td>{{contato.nome | uppercase | limitTo:5}}</td>
+
+* adicionando campo de busca dos contatos
+* criamos um input para informar o que buscar
+
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?">
+
+* indicamos na listagem o filtro a ser aplicado `filter:{nome: criterioDeBusca}`
+
+		<tr ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:'criterioDeOrdenacao':direcaoDeOrdenacao">
+			........
+		</tr>
+
+* adicionando filtro de data
+
+		{ nome: 'Lucas', telefone: '12344618', cor: 'black', data: new Date(), ....},
+
+* exibindo a o dia/mes/ano hora:min
+
+		<td>{{contato.data | date: 'dd/MM/yyyy HH:mm'}}</td>
+
+* adicionando filtro de moeda e aplicando ordenacao dos dados
+* estamos concatenando o valor e transformando o preco para moeda `operadora.nome + '( '+ (operadora.preco | currency) +' )'`
+
+		<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + '( '+ (operadora.preco | currency) +' )' group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
+			....
+		</select>
+
+* adicionando atributo preco
+
+		{ nome: 'Vivo', codigo: 14, categoria: 'Celular', preco:2 },
+
+* adicionando ordenacao por nome e telefone
+* teremos links nos titulos que ordenaram os registros, passando o nome do campo como criterio
+
+		<th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+		<th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
+
+* criacao da funcao
+* indicamos tambem a direcao, se eh ASC ou DESC com `$scope.direcaoDeOrdenacao = !$scope.direcaoDeOrdenacao;`
+
+		$scope.ordenarPor = function (campo) {
+			$scope.criterioDeOrdenacao = campo;
+			$scope.direcaoDeOrdenacao = !$scope.direcaoDeOrdenacao;
+		}
+
+* aplicando o filter no array junto com a ordenacao
+
+		<tr ng-repeat="contato in contatos | filter:{nome: criterioDeBusca} | orderBy:'criterioDeOrdenacao':direcaoDeOrdenacao">
+
+* limitando a quantidade de registros exibidos com filter ` | limitTo:10 |`
+
+		<tr ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:'criterioDeOrdenacao':direcaoDeOrdenacao">
+
+* podemos aplicar tambem para campos textos
+
+		<td>{{contato.nome | uppercase | limitTo:5}}</td>
