@@ -2,6 +2,7 @@ package br.com.jkavdev.angularjs.listatelefonicaapi.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Contato {
@@ -23,6 +24,7 @@ public class Contato {
         this.nome = nome;
         this.telefone = telefone;
         this.operadora = operadora;
+        this.data = LocalDateTime.now();
         cor = "red";
     }
 
@@ -65,6 +67,7 @@ public class Contato {
                 ", nome='" + nome + '\'' +
                 ", telefone='" + telefone + '\'' +
                 ", cor='" + cor + '\'' +
+                ", data='" + data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + '\'' +
                 ", " + operadora +
                 '}';
     }
