@@ -37,20 +37,19 @@
     <script>
         angular.module("listaTelefonica", ["ngMessages"]);
 
-        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, $filter, lowercaseFilter) {
+        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, $http, $filter, lowercaseFilter) {
             $scope.app = "Lista Telefonica";
-            $scope.contatos = [
-                { nome: $filter('lowercase')('Jhonatan'), telefone: '12345678', cor: 'blue', data: new Date(), operadora: { nome: lowercaseFilter('Vivo'), codigo: 14, categoria: 'Celular' } },
-                { nome: 'Lucas', telefone: '12344618', cor: 'black', data: new Date(), operadora: { nome: 'Oi', codigo: 13, categoria: 'Celular' } },
-                { nome: 'Maria', telefone: '12345615', cor: 'red', data: new Date(), operadora: { nome: 'Tim', codigo: 25, categoria: 'Celular' } },
-            ];
-            $scope.operadoras = [
-                { nome: 'Vivo', codigo: 14, categoria: 'Celular', preco:2 },
-                { nome: 'Oi', codigo: 13, categoria: 'Celular', preco:1 },
-                { nome: 'Tim', codigo: 25, categoria: 'Celular', preco:3 },
-                { nome: 'GVT', codigo: 23, categoria: 'Fixo', preco:4 },
-                { nome: 'Embratel', codigo: 21, categoria: 'Fixo', preco:5 },
-            ]
+
+            var carregarContatos = function(){
+                $http.get('http://localhost:8080/api/contatos/').then(function(resp, status){
+                    $scope.contatos = resp.data;
+                })
+            }
+            var carregarOperadoras = function(){
+                $http.get('http://localhost:8080/api/operadoras/').then(function(resp, status){
+                    $scope.operadoras = resp.data;
+                })
+            }
             $scope.adicionarContato = function (contato) {
                 $scope.contatos.push(angular.copy(contato));
                 delete $scope.contato;
@@ -70,6 +69,9 @@
                 $scope.criterioDeOrdenacao = campo;
                 $scope.direcaoDeOrdenacao = !$scope.direcaoDeOrdenacao;
             }
+
+            carregarOperadoras();
+            carregarContatos();
         });
     </script>
 

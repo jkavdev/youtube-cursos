@@ -15,12 +15,15 @@ public class Contato {
 
     private LocalDateTime data;
 
+    private String cor;
+
     private Contato() { }
 
     public Contato(String nome, String telefone, Operadora operadora) {
         this.nome = nome;
         this.telefone = telefone;
         this.operadora = operadora;
+        cor = "red";
     }
 
     @ManyToOne
@@ -47,12 +50,21 @@ public class Contato {
         return operadora;
     }
 
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+
     @Override
     public String toString() {
         return "Contato{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", telefone='" + telefone + '\'' +
+                ", cor='" + cor + '\'' +
                 ", " + operadora +
                 '}';
     }

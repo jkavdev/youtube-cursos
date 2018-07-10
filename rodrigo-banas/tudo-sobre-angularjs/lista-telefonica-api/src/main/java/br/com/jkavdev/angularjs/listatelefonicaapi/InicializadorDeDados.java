@@ -21,11 +21,11 @@ public class InicializadorDeDados implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Operadora vivo = new Operadora("Vivo", 13, "Celular");
-        Operadora tim = new Operadora("Tim", 14, "Celular");
-        Operadora claro = new Operadora("Claro", 15, "Celular");
-        Operadora gvt = new Operadora("GVT", 15, "Fixo");
-        Operadora embratel = new Operadora("Embratel", 15, "Fixo");
+        Operadora vivo = new Operadora("Vivo", 13, "Celular", 2);
+        Operadora tim = new Operadora("Tim", 14, "Celular", 3);
+        Operadora claro = new Operadora("Claro", 15, "Celular", 4);
+        Operadora gvt = new Operadora("GVT", 15, "Fixo", 5);
+        Operadora embratel = new Operadora("Embratel", 15, "Fixo", 6);
 
         Arrays.asList(vivo, tim, claro, gvt, embratel)
                 .forEach(o -> operadoraRepository.save(o));
