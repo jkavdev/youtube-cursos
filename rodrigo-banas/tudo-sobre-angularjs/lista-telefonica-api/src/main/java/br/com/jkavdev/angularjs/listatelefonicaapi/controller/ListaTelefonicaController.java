@@ -5,10 +5,8 @@ import br.com.jkavdev.angularjs.listatelefonicaapi.domain.Operadora;
 import br.com.jkavdev.angularjs.listatelefonicaapi.repository.ContatoRepository;
 import br.com.jkavdev.angularjs.listatelefonicaapi.repository.OperadoraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +23,12 @@ public class ListaTelefonicaController {
     @GetMapping("/contatos")
     public List<Contato> getAllContatos() {
         return repository.findAll();
+    }
+
+    @PostMapping("/contatos")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Contato create(@RequestBody Contato contato) {
+        return repository.save(contato);
     }
 
     @GetMapping("/operadoras")

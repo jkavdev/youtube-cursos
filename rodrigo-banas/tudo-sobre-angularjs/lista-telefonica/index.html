@@ -43,6 +43,9 @@
             var carregarContatos = function(){
                 $http.get('http://localhost:8080/api/contatos/').then(function(resp, status){
                     $scope.contatos = resp.data;
+                }).catch(function(error){
+                    $scope.message = "Ocorreu um problema: " + error;
+                    console.log(error)
                 })
             }
             var carregarOperadoras = function(){
@@ -51,9 +54,12 @@
                 })
             }
             $scope.adicionarContato = function (contato) {
-                $scope.contatos.push(angular.copy(contato));
-                delete $scope.contato;
-                $scope.contatoForm.$setPristine();
+                contato.data = new Date();
+                $http.post('http://localhost:8080/api/contatos/', contato).then(function(resp, status){
+                    delete $scope.contato;
+                    $scope.contatoForm.$setPristine();
+                    carregarContatos();
+                })
             }
             $scope.apagarContato = function (contatos) {
                 $scope.contatos = contatos.filter(function (contato) {
@@ -81,6 +87,8 @@
 
     <div class="jumbotron">
         <h3>{{app}}</h3>
+
+        {{message}}
 
         <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?">
 

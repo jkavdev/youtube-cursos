@@ -7,7 +7,8 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Contato {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String nome;
@@ -18,7 +19,8 @@ public class Contato {
 
     private String cor;
 
-    private Contato() { }
+    private Contato() {
+    }
 
     public Contato(String nome, String telefone, Operadora operadora) {
         this.nome = nome;
@@ -36,20 +38,32 @@ public class Contato {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getTelefone() {
         return telefone;
     }
 
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public LocalDateTime getData() {
         return data;
     }
 
-    public Operadora getOperadora() {
-        return operadora;
+    public void setData(LocalDateTime data) {
+        this.data = data;
     }
 
     public String getCor() {
@@ -58,6 +72,14 @@ public class Contato {
 
     public void setCor(String cor) {
         this.cor = cor;
+    }
+
+    public Operadora getOperadora() {
+        return operadora;
+    }
+
+    public void setOperadora(Operadora operadora) {
+        this.operadora = operadora;
     }
 
     @Override
