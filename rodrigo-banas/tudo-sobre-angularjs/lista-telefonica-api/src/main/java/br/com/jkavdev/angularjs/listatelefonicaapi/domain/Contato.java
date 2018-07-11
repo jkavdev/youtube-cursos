@@ -11,6 +11,8 @@ public class Contato {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    private String serial;
+
     private String nome;
 
     private String telefone;
@@ -40,6 +42,14 @@ public class Contato {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
     public String getNome() {
