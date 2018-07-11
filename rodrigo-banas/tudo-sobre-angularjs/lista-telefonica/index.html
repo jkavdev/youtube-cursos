@@ -3,83 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista Telefonica</title>
-    <link rel="stylesheet" href="js/bootstrap/bootstrap.css">
-    <script src="js/angular/angular.js"></script>
-    <script src="js/angular/angular-messages.js"></script>
-    <script src="js/angular/angular-locale_pt-br.js"></script>
-
-    <style>
-        .jumbotron {
-            width: 600px;
-            text-align: center;
-            margin-top: 20px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .table {
-            margin-top: 20px;
-        }
-
-        .form-control {
-            margin-bottom: 5px;
-        }
-
-        .selecionado {
-            background-color: yellow;
-        }
-
-        .negrito {
-            font-weight: bold;
-        }
-    </style>
-
-    <script>
-        angular.module("listaTelefonica", ["ngMessages"]);
-
-        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, $http, $filter, lowercaseFilter) {
-            $scope.app = "Lista Telefonica";
-
-            var carregarContatos = function(){
-                $http.get('http://localhost:8080/api/contatos/').then(function(resp, status){
-                    $scope.contatos = resp.data;
-                }).catch(function(error){
-                    $scope.message = "Ocorreu um problema: " + error;
-                    console.log(error)
-                })
-            }
-            var carregarOperadoras = function(){
-                $http.get('http://localhost:8080/api/operadoras/').then(function(resp, status){
-                    $scope.operadoras = resp.data;
-                })
-            }
-            $scope.adicionarContato = function (contato) {
-                contato.data = new Date();
-                $http.post('http://localhost:8080/api/contatos/', contato).then(function(resp, status){
-                    delete $scope.contato;
-                    $scope.contatoForm.$setPristine();
-                    carregarContatos();
-                })
-            }
-            $scope.apagarContato = function (contatos) {
-                $scope.contatos = contatos.filter(function (contato) {
-                    if (!contato.selecionado) return contato;
-                });
-            }
-            $scope.isContatoSelecionado = function (contatos) {
-                return contatos.some(function (contato) {
-                    return contato.selecionado;
-                });
-            }
-            $scope.ordenarPor = function (campo) {
-                $scope.criterioDeOrdenacao = campo;
-                $scope.direcaoDeOrdenacao = !$scope.direcaoDeOrdenacao;
-            }
-
-            carregarOperadoras();
-            carregarContatos();
-        });
-    </script>
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-messages.js"></script>
+    <script src="lib/angular/angular-locale_pt-br.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers/listaTelefonicaCtrl.js"></script>
 
 </head>
 
@@ -146,7 +76,7 @@
         Versão do projeto: {{1.36 | number:1}}.SNAPSHOT
     </div>
 
-    <div ng-include="'footer.html'"></div>
+    <div ng-include="'/view/footer.html'"></div>
 
 </body>
 
