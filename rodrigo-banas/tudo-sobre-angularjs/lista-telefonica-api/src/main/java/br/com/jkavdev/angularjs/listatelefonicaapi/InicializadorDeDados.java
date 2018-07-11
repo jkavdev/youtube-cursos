@@ -30,11 +30,11 @@ public class InicializadorDeDados implements CommandLineRunner {
         Arrays.asList(vivo, tim, claro, gvt, embratel)
                 .forEach(o -> operadoraRepository.save(o));
 
-        Contato jhonatan = new Contato("Jhonatan", "9999-3214", vivo);
-        Contato eilane = new Contato("Eilane", "9999-3214", tim);
-        Contato douglas = new Contato("Douglas", "9999-3214", claro);
-        Contato maria = new Contato("Maria", "9999-3214", gvt);
-        Contato lucas = new Contato("Lucas", "9999-3214", embratel);
+        Contato jhonatan = new Contato("Jhonatan Kolen Mendes", "9999-3214", vivo);
+        Contato eilane = new Contato("Eilane de Sá", "9999-3214", tim);
+        Contato douglas = new Contato("Douglas Mello de Santos", "9999-3214", claro);
+        Contato maria = new Contato("Maria Lurdes", "9999-3214", gvt);
+        Contato lucas = new Contato("Lucas Cassios", "9999-3214", embratel);
 
         Arrays.asList(jhonatan, eilane, douglas, maria, lucas)
                 .forEach(c -> contatoRepository.save(c));

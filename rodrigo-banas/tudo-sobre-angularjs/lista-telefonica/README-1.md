@@ -167,3 +167,23 @@
 		});
 
 * provider sao os unicos servicos que conseguem ter seus valores alterados pelo config		
+
+# Filters
+
+* criando filter para deixar a primeira letra do nome maiuscula
+* o filter vai sempre receber um input e retornar algo `return function (input) { return output;}`
+
+		angular.module("listaTelefonica").filter("name", function () {
+			return function (input) {
+				var listaDeNomes = input.split(" ");
+				var listaDeNomesFormatada = listaDeNomes.map(function (nome) {
+					if (/(da|de)/.test(nome)) return nome;
+					return nome.charAt(0).toUpperCase() + nome.substring(1).toLowerCase();
+				});
+				return listaDeNomesFormatada.join(" ");
+			};
+		});
+
+* utilizando o filter no campo nome
+
+		<td>{{contato.nome | name}}</td>
