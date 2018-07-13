@@ -258,3 +258,55 @@
         <ui-alert title="Ops, acontenceu um problema!">
             {{error}}
         </ui-alert>        
+        
+* criando uma diretiva para formata datas
+* com `link: function(){}` estamos indicando que teremos uma directiva que alterar o DOM
+* `link: function (scope, element, attrs, ctrl) {}` recebendo os paramentos da diretiva, para que possamos alterar seu valor
+* para  receber `ctrl` temos que indicar que precisamos de um modulo do angular, `require: "ngModel",`
+
+* estamos indica que a cada pressionamento de botao executaremos uma tarefa
+* `ctrl.$setViewValue(_formatDate(ctrl.$viewValue));` indicando que o valor a ser rederizado eh o valor formatado do elemento
+* `ctrl.$render();` realizando a renderizacao da alteracao do valor
+
+        element.bind("keyup", function () {
+            ctrl.$setViewValue(_formatDate(ctrl.$viewValue));
+            console.log("valor a ser renderizado no DOM:" + ctrl.$viewValue);
+            ctrl.$render();
+        }); 
+        
+* atribuindo um parse que atribuira uma data para o valor da diretiva  
+* podemos ter varios parsers
+* apenas atribuiremos um valor caso a data esteje completa `if (value.length === 10) {return new Date(dateArray[2], dateArray[1] - 1, dateArray[0])}`
+
+        ctrl.$parsers.push(function (value) {
+            if (value.length === 10) {
+                var dateArray = value.split("/");
+                console.log("new Date: " + new Date(dateArray[2], dateArray[1] - 1, dateArray[0]));
+                return new Date(dateArray[2], dateArray[1] - 1, dateArray[0]);
+            }
+        });        
+ 
+* formatando o valor da diretiva caso seja inicializado com algum valor
+* inicializando valor com um `new Date()`
+
+        $scope.contato = {
+            data: new Date()
+        }
+
+* formatando o valor
+* como os parsers temos varios formatadores
+        
+* no caso necessitaremos o `filter` do angular para realizar o parse da data no formato desejado
+
+        angular.module("listaTelefonica").directive("uiDate", function ($filter) {}        
+        
+* definindo os formatters
+* utilizando o filter para formatar o valor para o desejado
+
+        ctrl.$formatters.push(function (value) {
+            return $filter("date")(value, "dd/MM/yyyy")
+        });         
+        
+* utilizando a diretiva em um input
+
+        <input type="text" class="form-control" ng-model="contato.data" name="data" placeholder="Data" ui-date/>        
