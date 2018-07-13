@@ -5,6 +5,7 @@
     <title>Lista Telefonica</title>
     <link rel="stylesheet" href="lib/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/ui.css">
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular/angular-messages.js"></script>
     <script src="lib/angular/angular-locale_pt-br.js"></script>
@@ -17,6 +18,7 @@
     <script src="js/providers/serialGeneratorService.js"></script>
     <script src="js/filters/nameFilter.js"></script>
     <script src="js/filters/ellipsisFilter.1.js"></script>
+    <script src="js/directives/uiAlertDirective.js"></script>
 
 </head>
 
@@ -25,7 +27,9 @@
     <div class="jumbotron">
         <h3>{{app}}</h3>
 
-        {{message}}
+        <ui-alert title="Ops, acontenceu um problema!">
+            {{error}}
+        </ui-alert>
 
         <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?">
 

@@ -212,4 +212,49 @@
         		
 * encadeando filtros
 
-        <td>{{contato.nome | name | ellipsis:15}}</td>		
+        <td>{{contato.nome | name | ellipsis:15}}</td>
+        
+# Directives
+
+* criando uma diretiva para exibir mensagens
+* teremos um titulo `{{title}}` que sera injetado
+* e o corpo `ng-transclude` que sera injetado como elemento filho da diretiva
+
+        <div class="ui-alert">
+            <div class="ui-alert-title">
+                {{title}}
+            </div>
+            <div class="ui-alert-messge" ng-transclude></div>
+        </div>        		
+        
+* definindo a diretiva
+* nome de acesso a diretiva `angular.module("listaTelefonica").directive("uiAlert", function () {}`
+* `templateUrl: "view/alert.html",` indicando onde esta o html desta diretiva
+* `replace: true,` estamos indicando se sera renderizado o html em si da diretiva ou sera adicionado o `<nome da diretiva><htmlDiretiva><htmlDiretiva></nome da diretiva>`
+* estamos indincando que podemos utilizar esta diretiva como atributo ou elemento `restrict: "AE",`
+* `transclude: true` indica que esta diretiva pode ter elementos como filho
+* `scope: { title: "@" },` estamos mapeando os atributos da diretiva para o escopo da diretiva
+* `title: "@"` indica que o um atributo tanto da diretiva quanto no escopo com nomes iguais e o valor do atributo sera passado uma unica vez para a diretiva com `@`
+* `message: "="` indica que temos valores iguais, e criamos um twoway databind do escope externo quanto o interno da diretiva
+
+
+        angular.module("listaTelefonica").directive("uiAlert", function () {
+            return {
+                templateUrl: "view/alert.html",
+                replace: true,
+                restrict: "AE",
+                scope: {
+                    title: "@"
+                },
+                transclude: true
+            };
+        });        
+        
+* utilizando a diretiva
+
+        <div ui-alert title="Ops, acontenceu um problema!">
+            {{error}}
+        </div>
+        <ui-alert title="Ops, acontenceu um problema!">
+            {{error}}
+        </ui-alert>        

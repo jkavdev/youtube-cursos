@@ -7,7 +7,7 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($s
         contatosAPI.getContatos().then(function (resp, status) {
             $scope.contatos = resp.data;
         }).catch(function (error) {
-            $scope.message = "Ocorreu um problema: " + error;
+            $scope.error = "Erro ao buscar os dados";
             console.log(error)
         })
     }
