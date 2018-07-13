@@ -187,3 +187,29 @@
 * utilizando o filter no campo nome
 
 		<td>{{contato.nome | name}}</td>
+
+* criando filter para indicar omissao de texto, caso o texto seja maior que o definido
+* passando o nome a ser trabalhado e o tamanho do texto a ser exibido
+* retorna apenas o texto sem formatacao, porque eh menor que o tamanho a ser exibido `if (input.length <= size) return input;`
+* `var output = input.substring(0, (size | 2)) + "...";` retorna o texto com o tamanho especificado
+* `(size | 2)` evalua o campo size, se tiver valor, continua com o valor, senao tiver atribui o valor 2
+
+		angular.module("listaTelefonica").filter("ellipsis", function () {
+			return function (input, size) {
+				if (input.length <= size) return input;
+				var output = input.substring(0, (size | 2)) + "...";
+				return output;
+			};
+		});
+		
+* utilizando o filter especificando o tamanho a ser exibido
+
+        <td>{{contato.nome | ellipsis:15}}</td>		
+        
+* utilizando o filter nao especificando o tamanho a ser exibido
+
+        <td>{{contato.nome | ellipsis}}</td>
+        		
+* encadeando filtros
+
+        <td>{{contato.nome | name | ellipsis:15}}</td>		
