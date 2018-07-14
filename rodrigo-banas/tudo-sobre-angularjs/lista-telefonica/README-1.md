@@ -309,4 +309,80 @@
         
 * utilizando a diretiva em um input
 
-        <input type="text" class="form-control" ng-model="contato.data" name="data" placeholder="Data" ui-date/>        
+        <input type="text" class="form-control" ng-model="contato.data" name="data" placeholder="Data" ui-date/>
+        
+* criando uma diretiva para representar um accordion
+* com `link: function (scope, element, attrs, ctrl) {}` podemos adicionar o comportamento de quando clicado
+* `ctrl.registerAccordion(scope);` adicionando este accordion no array de accordions
+* `scope.open = function () {}` fechara todos os accordions e abrirara o que esta sendo clicado
+
+        angular.module("listaTelefonica").directive("uiAccordion", function () {
+            return {
+                templateUrl: "view/accordion.html",
+                transclude: true,
+                scope: {
+                    title: "@"
+                },
+                require: "^uiAccordions",
+                link: function (scope, element, attrs, ctrl) {
+                    ctrl.registerAccordion(scope);
+                    scope.open = function () {
+                        ctrl.closeAll();
+                        scope.isOpened = true;
+                    }
+                }
+            };
+        });    
+        
+* como precisaremos de um modulo que gerencie os accordions, criaremos uma diretiva pai dos accordions
+* `this.registerAccordion = function (accordion) {}` adicionando o accordion no array
+* `this.closeAll = function () {}` itera sobre os accordions e atribui o estado de fechado
+
+        angular.module("listaTelefonica").directive("uiAccordions", function () {
+            return {
+                controller: function ($scope, $element, $attrs) {
+                    var accordions = [];
+                    this.registerAccordion = function (accordion) {
+                        accordions.push(accordion);
+                    };
+                    this.closeAll = function () {
+                        accordions.forEach(function (accordion) {
+                            accordion.isOpened = false;
+                        });
+                    };
+                }
+            };
+        });
+        
+* indicando que a diretiva filha tem um pai `require: "^uiAccordions"`
+* utilizando metodos da diretiva pai `ctrl.registerAccordion(scope);`
+
+        angular.module("listaTelefonica").directive("uiAccordion", function () {
+                    return {
+                        require: "^uiAccordions",
+                        link: function (scope, element, attrs, ctrl) {
+                            ctrl.registerAccordion(scope);
+                        }
+                    };
+                });            
+        
+        
+* html da diretiva
+* `ng-transclude` pode ter elementos filhos
+
+        <div class="ui-accordion-title" ng-click="open()">{{title}}</div>
+        <div class="ui-accordion-content" ng-show="isOpened" ng-transclude></div>     
+        
+* utilizando a diretiva
+
+        <ui-accordions>
+            <ui-accordion title="Accordion1">
+                Nicha has found that Thai citizens have been used as lab rats to test an antidote for a virus created by a drugs company. Nicha must find the victims before it's too
+            </ui-accordion>
+            <ui-accordion title="Accordion2">
+                Nicha has found that Thai citizens have been used as lab rats to test an antidote for a virus created by a drugs company. Nicha must find the victims before it's too
+            </ui-accordion>
+            <ui-accordion title="Accordion3">
+                A stream is an abstract concept that represents a sequence of objects created by a source, it’s neither a data structure nor a collection object where we can store items.
+            </ui-accordion>
+        </ui-accordions>                       
