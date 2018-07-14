@@ -21,6 +21,10 @@ public class Contato {
 
     private String cor;
 
+    @ManyToOne
+    @JoinColumn(name = "operadora_id")
+    private Operadora operadora;
+
     private Contato() {
     }
 
@@ -31,10 +35,6 @@ public class Contato {
         this.data = LocalDateTime.now();
         cor = "red";
     }
-
-    @ManyToOne
-    @JoinColumn(name = "operadora_id")
-    private Operadora operadora;
 
     public Integer getId() {
         return id;
