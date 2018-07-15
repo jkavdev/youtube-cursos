@@ -161,3 +161,41 @@
             ...........................
             generateSerial($scope.contatos);
         }); 
+        
+* visualizando os detalhes do contato
+* para isso passaremos o id contato pelo url para identifica-lo
+* `$routeProvider.when("/detalhesContato/:id", {` com `:id` estamos indicando que receberemos um parametro pela url
+* podemos ja configurar um resolver para buscar o contato
+* mas temos que passar alguns parametro, o `$route`, atraves dele pegamos o id `$route.current.params.id`
+
+        $routeProvider.when("/detalhesContato/:id", {
+            templateUrl: "view/detalhesContato.html",
+            controller: "detalhesContatoCtrl",
+            resolve: {
+                contato: function (contatosAPI, $route) {
+                    return contatosAPI.getContato($route.current.params.id);
+                }
+            }
+        });        
+        
+* controller
+
+        angular.module("listaTelefonica").controller("detalhesContatoCtrl", function ($scope, contato) {
+            $scope.contato = contato.data;
+        });        
+        
+* adicionamos um link na listagem de contatos, no atributo nome
+* que chamara a rota de detalhes passando seu id como parametro
+
+        <td><a href="#!/detalhesContato/{{contato.id}}">{{contato.nome | name}}</a></td>
+                
+* exibindo as informacoes do contato
+
+        <div class="jumbotron">
+            <table class="table">
+                <tr><td>{{contato.nome}}</td></tr>
+                <tr><td>{{contato.telefone}}</td></tr>
+                <tr><td>{{contato.data | date:"dd/MM/yyyy"}}</td></tr>
+            </table>
+            <a class="btn btn-info btn-block" href="#!/contatos">Contatos</a>
+        </div>                

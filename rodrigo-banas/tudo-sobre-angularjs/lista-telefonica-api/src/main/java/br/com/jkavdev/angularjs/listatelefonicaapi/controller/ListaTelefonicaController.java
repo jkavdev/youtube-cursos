@@ -6,9 +6,11 @@ import br.com.jkavdev.angularjs.listatelefonicaapi.repository.ContatoRepository;
 import br.com.jkavdev.angularjs.listatelefonicaapi.repository.OperadoraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -23,6 +25,15 @@ public class ListaTelefonicaController {
     @GetMapping("/contatos")
     public List<Contato> getAllContatos() {
         return repository.findAll();
+    }
+
+    @GetMapping("/contato/{id}")
+    public ResponseEntity<Contato> getContato(@PathVariable Integer id) {
+        Optional<Contato> contatoOptional = repository.findById(id);
+        if (contatoOptional.isPresent())
+            return ResponseEntity.ok().body(contatoOptional.get());
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/contatos")
