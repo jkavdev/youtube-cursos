@@ -39,6 +39,125 @@
         
         angular.module("ui").directive("uiAccordion", function () {
             ............
-        });      
+        });    
         
-                  
+# Single Page Application com ngRoute
+
+* importando o ngRoute 
+
+        <script src="lib/angular/angular-route.js"></script>
+        
+* disponibilizando modulo para a aplicacao
+
+        angular.module("listaTelefonica", ["ngMessages", "serialGenerator", "ui", "ngRoute"]);
+        
+* separando a aplicacao
+* separando a criacao de contato em outra tela `novoContato.html`
+
+        <div class="jumbotron">
+            <form name="contatoForm">
+                <input type="text" class="form-control" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" />
+                <input type="text" class="form-control" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+                <input type="text" class="form-control" ng-model="contato.data" name="data" placeholder="Data" ui-date/>
+                <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + '( '+ (operadora.preco | currency) +' )' group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
+                    <option value="">Selecione uma operadora</option>
+                </select>
+            </form>
+            <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Contato</button>
+        </div>
+
+* configuracao da rota
+* com `$routeProvider` poderemos configurar as rotas
+* quando acessado `/novoContato` `$routeProvider.when("/novoContato", {}` sera invocado
+* indicamos aonde esta o html `templateUrl: "view/novoContato.html",`
+* `controller: "novoContatoCtrl",` indicamos quem eh o controller responsavel
+* podemos ainda dizer as dependencias para esta rota
+* como anteriormente precisavamos da lista de contato para exibir a lista
+* indicaremos no `resolve: { operadoras: function (operadorasAPI) { return operadorasAPI.getOperadoras(); } }`
+* onde operadoras ficara disponivel para o controller responsavel
+
+        angular.module("listaTelefonica").config(function ($routeProvider) {
+            $routeProvider.when("/novoContato", {
+                templateUrl: "view/novoContato.html",
+                controller: "novoContatoCtrl",
+                resolve: {
+                    operadoras: function (operadorasAPI) {
+                        return operadorasAPI.getOperadoras();
+                    }
+                }
+            });
+            $routeProvider.otherwise({redirectTo: "/contatos"});
+        });
+        
+* controller
+* recebendo operadoras como depedencia do resolve do ngRoute `angular.module("listaTelefonica").controller("novoContatoCtrl", function (operadoras) {`
+* atribuindo os dados ao escopo `$scope.operadoras = operadoras.data;`
+* como separamos de tela, quando for adicionado um contato usaremos o location para redirecionar para a lista de contatos
+* recendo o location como dependencia `angular.module("listaTelefonica").controller("novoContatoCtrl", function ($location) {`
+* `$location.path("/contatos");` redirecionando para contatos
+
+        angular.module("listaTelefonica").controller("novoContatoCtrl", function ($scope, contatosAPI, serialGenerator, $location, operadoras) {
+            $scope.operadoras = operadoras.data;
+            
+            $scope.adicionarContato = function (contato) {
+                contatosAPI.saveContato(contato).then(function (resp) {
+                    ............................
+                    $location.path("/contatos");
+                })
+            };
+        });        
+                      
+* criando a listagem de contatos
+* adicionando link para a tela de adicionar contato `<a class="btn btn-info btn-block" href="#!/novoContato">Novo Contato</a>`
+
+        <table class="table table-striped" ng-show="contatos.length > 0">
+            <tr>
+                <th></th>
+                <th>Serial</th>
+                <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+                <th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
+                <th>Operadora</th>
+                <th>Data</th>
+                <th></th>
+            </tr>
+            <tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDeOrdenacao">
+                <td><input type="checkbox" ng-model="contato.selecionado" /></td>
+                <td>{{contato.serial}}</td>
+                <td>{{contato.nome | name | ellipsis:15}}</td>
+                <td>{{contato.telefone}}</td>
+                <td>{{contato.operadora.nome | uppercase}}</td>
+                <td>{{contato.data | date: 'dd/MM/yyyy HH:mm'}}</td>
+                <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
+            </tr>
+        </table>
+        <hr />
+        <a class="btn btn-info btn-block" href="#!/novoContato">Novo Contato</a>
+        <button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!isContatoSelecionado(contatos)" ng-if="contatos.length > 0">Apagar Contato</button>
+        
+* configuracao da rota de contatos
+
+        $routeProvider.when("/contatos", {
+            templateUrl: "view/contatos.html",
+            controller: "listaTelefonicaCtrl",
+            resolve: {
+                contatos: function (contatosAPI) {
+                    return contatosAPI.getContatos();
+                }
+            }
+        });                                          
+
+* controller da lista de contatos
+* recebendo os contatos de ngRoute `angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function (contatos) {`
+* atribuindo dados ao escope
+
+        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, contatos, contatosAPI, serialGenerator) {
+            $scope.contatos = contatos.data;
+            var generateSerial = function (contatos) {
+                contatos.forEach(function (contato) {
+                    if(!contato.serial)
+                        contato.serial = serialGenerator.generate();
+                })
+            };
+            ...........................
+            generateSerial($scope.contatos);
+        }); 
