@@ -1,0 +1,120 @@
+<html ng-app="listaTelefonica">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Telefonica</title>
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-messages.js"></script>
+    <script src="lib/angular/angular-locale_pt-br.js"></script>
+    <script src="lib/serialGenerator/serialGeneratorService.js"></script>
+    <script src="lib/ui/ui.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers/listaTelefonicaCtrl.js"></script>
+    <script src="js/services/contatosAPIService.js"></script>
+    <script src="js/services/operadorasAPIService.js"></script>
+    <script src="js/config/serialGeneratorConfig.js"></script>
+    <script src="js/value/configValue.js"></script>
+    <script src="js/filters/nameFilter.js"></script>
+    <script src="js/filters/ellipsisFilter.1.js"></script>
+    <script src="js/directives/uiAlertDirective.js"></script>
+    <script src="js/directives/uiDateDirective.js"></script>
+
+</head>
+
+<body ng-controller="listaTelefonicaCtrl">
+
+    <div class="jumbotron">
+        <h3>{{app}}</h3>
+
+        <ui-alert title="Ops, acontenceu um problema!">
+            {{error}}
+        </ui-alert>
+
+        <ui-accordions>
+            <ui-accordion title="Accordion1">
+                Nicha has found that Thai citizens have been used as lab rats to test an antidote for a virus created by a drugs company. Nicha must find the victims before it's too
+                late. She's hunted by an exec who wants to protect his company while the government wants to eliminate the subjects before the virus spreads...
+                Nicha has found that Thai citizens have been used as lab rats to test an antidote for a virus created by a drugs company. Nicha must find the victims before it's too
+                late. She's hunted by an exec who wants to protect his company while the government wants to eliminate the subjects before the virus spreads...
+            </ui-accordion>
+            <ui-accordion title="Accordion2">
+                Nicha has found that Thai citizens have been used as lab rats to test an antidote for a virus created by a drugs company. Nicha must find the victims before it's too
+                late. She's hunted by an exec who wants to protect his company while the government wants to eliminate the subjects before the virus spreads...
+                Nicha has found that Thai citizens have been used as lab rats to test an antidote for a virus created by a drugs company. Nicha must find the victims before it's too
+                late. She's hunted by an exec who wants to protect his company while the government wants to eliminate the subjects before the virus spreads...
+            </ui-accordion>
+            <ui-accordion title="Accordion3">
+                A stream is an abstract concept that represents a sequence of objects created by a source, it’s neither a data structure nor a collection object where we can store items.
+                So we can’t point to any location in the stream, we just interact with items by specifying the functions.
+                A stream is an abstract concept that represents a sequence of objects created by a source, it’s neither a data structure nor a collection object where we can store items.
+                So we can’t point to any location in the stream, we just interact with items by specifying the functions.
+            </ui-accordion>
+        </ui-accordions>
+
+        <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?">
+
+        <table class="table table-striped" ng-show="contatos.length > 0">
+            <tr>
+                <th></th>
+                <th>Serial</th>
+                <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+                <th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
+                <th>Operadora</th>
+                <th>Data</th>
+                <th></th>
+            </tr>
+            <tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDeOrdenacao">
+                <td><input type="checkbox" ng-model="contato.selecionado" /></td>
+                <td>{{contato.serial}}</td>
+                <td>{{contato.nome | name | ellipsis:15}}</td>
+                <td>{{contato.telefone}}</td>
+                <td>{{contato.operadora.nome | uppercase}}</td>
+                <td>{{contato.data | date: 'dd/MM/yyyy HH:mm'}}</td>
+                <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
+            </tr>
+        </table>
+
+        <hr />
+
+        <form name="contatoForm">
+            <input type="text" class="form-control" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" />
+            <input type="text" class="form-control" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+            <input type="text" class="form-control" ng-model="contato.data" name="data" placeholder="Data" ui-date/>
+            <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + '( '+ (operadora.preco | currency) +' )' group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
+                <option value="">Selecione uma operadora</option>
+            </select>
+        </form>
+
+        <div class="alert alert-danger" ng-messages="contatoForm.nome.$error">
+            <div ng-message="required" ng-show="contatoForm.nome.$dirty">
+                Preencha o nome!
+            </div>
+            <div ng-message="minlength">
+                O campo nome deve conter no mínimo 10 caracteres!
+            </div>
+        </div>
+
+        <div class="alert alert-danger" ng-show="contatoForm.telefone.$error.required && contatoForm.telefone.$dirty">
+            Preencha o telefone!
+        </div>
+        <div class="alert alert-danger" ng-show="contatoForm.telefone.$error.pattern">
+            O campo telefone deve ter o formato DDDDD-DDDD!
+        </div>
+
+        <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Contato</button>
+        <button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!isContatoSelecionado(contatos)" ng-if="contatos.length > 0">Apagar Contato</button>
+
+    </div>
+
+    <div style="text-align: center">
+        Versão do projeto: {{1.36 | number:1}}.SNAPSHOT
+    </div>
+
+    <div ng-include="'/view/footer.html'"></div>
+
+</body>
+
+</html>
