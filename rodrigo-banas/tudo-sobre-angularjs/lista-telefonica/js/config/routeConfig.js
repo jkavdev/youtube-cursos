@@ -30,6 +30,9 @@ angular.module("listaTelefonica").config(function ($routeProvider) {
     $routeProvider.when("/accordions", {
         templateUrl: "view/accordions.html",
     });
+    $routeProvider.when("/error", {
+        templateUrl: "view/error.html",
+    });
     $routeProvider.otherwise({redirectTo: "/contatos"});
 
 });

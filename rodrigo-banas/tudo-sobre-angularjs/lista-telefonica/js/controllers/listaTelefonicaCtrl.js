@@ -2,6 +2,8 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($s
     $scope.app = "Lista Telefonica";
     $scope.contatos = contatos.data;
 
+    console.log(contatos.config.url);
+
     var generateSerial = function (contatos) {
         contatos.forEach(function (contato) {
             if(!contato.serial)

@@ -199,3 +199,126 @@
             </table>
             <a class="btn btn-info btn-block" href="#!/contatos">Contatos</a>
         </div>                
+        
+# Interceptors
+
+* adicionando interceptor para adicionar a todas as requisicoes um parametro indicando quando foi feita
+* definindo interceptor, `angular.module("listaTelefonica").factory("timestampInterceptor", function () {}`
+* `request: function (config) {}` indicamos que interceptaremos todas as requisicoes
+* `var url = config.url;` url da requisicao
+* `if(url.indexOf('view') > -1) {}` evitando requisicoes para paginas html
+* adicionando o parametro da data `var timestamp = new Date().getTime(); config.url = url + "?timestamp" + timestamp;`
+
+        angular.module("listaTelefonica").factory("timestampInterceptor", function () {
+            return {
+                request: function (config) {
+                    var url = config.url;
+                    if(url.indexOf('view') > -1) {
+                        return config;
+                    }
+                    var timestamp = new Date().getTime();
+                    config.url = url + "?timestamp" + timestamp;
+                    return config;
+                }
+            };
+        });
+        
+* registrando nosso interceptador
+
+        angular.module("listaTelefonica").config(function ($httpProvider) {
+            $httpProvider.interceptors.push("timestampInterceptor");
+        });
+        
+* importando nosso interceptador
+
+       <script src="js/interceptors/timestampInterceptor.js"></script>
+       
+* criando um interceptador para interceptar erros e redirecionar para uma pagina de error
+* definindo `angular.module("listaTelefonica").factory("errorInterceptor", function ($q, $location) {}`
+* receberemos como depedencia `$q` que trabalha com promises
+* `$location` para nos usar o redirecionamento
+* indicando quando for uma resposta de error `responseError: function (error) {`
+* registrando o erro no gerenciador de promessas `return $q.reject(error);`
+
+        angular.module("listaTelefonica").factory("errorInterceptor", function ($q, $location) {
+            return {
+                responseError: function (error) {
+                    if(error.status === 404){
+                        $location.path("/error")
+                    }
+                    return $q.reject(error);
+                }
+            }
+        });
+        
+* registrando interceptador
+
+        angular.module("listaTelefonica").config(function ($httpProvider) {
+            $httpProvider.interceptors.push("timestampInterceptor");
+            $httpProvider.interceptors.push("errorInterceptor");
+        });                               
+
+* configurando rota para acesso da pagina de erro
+
+        $routeProvider.when("/error", {
+            templateUrl: "view/error.html",
+        });
+        
+* html do error
+
+        <div class="jumbotron">
+            <h3>Não foi possível processar sua solicitação</h3>
+            <a class="btn btn-info btn-block" href="#!/contatos">Voltar a contatos</a>
+        </div>        
+        
+* criando um interceptador para o carregamento da rota
+* definicao `angular.module("listaTelefonica").factory("loadingInterceptor", function ($q, $rootScope, $timeout) {}`
+* adicionaremos `$rootScope` para adicionar uma propriedade no escopo pai
+* `$timeout` simularemos um delay na resposta
+* usaremos todos os modos de interceptacao
+* no inicio da requisicao atribuimos o estado de carregando
+* e ao final de todas os outros modos de interceptacao retiramos o estado de carregando
+
+        angular.module("listaTelefonica").factory("loadingInterceptor", function ($q, $rootScope, $timeout) {
+            return {
+                request: function (config) {
+                    $rootScope.loading = true;
+                    return config;
+                },
+                requestError: function (rejection) {
+                    $rootScope.loading = false;
+                    return $q.reject(rejection);
+                },
+                response: function (response) {
+                    $timeout(function () {
+                        $rootScope.loading = false;
+                    }, 500);
+                    return response;
+                },
+                responseError: function (rejection) {
+                    $rootScope.loading = false;
+                    return $q.reject(rejection);
+                },
+            }
+        });        
+        
+* registrando interceptador
+
+        angular.module("listaTelefonica").config(function ($httpProvider) {
+            $httpProvider.interceptors.push("timestampInterceptor");
+            $httpProvider.interceptors.push("errorInterceptor");
+            $httpProvider.interceptors.push("loadingInterceptor");
+        });
+        
+* indicamos onde estiver carregando nao sera renderizada as views        
+        
+        <div ng-hide="loading">
+            <div ng-view></div>
+            <div ng-include="'/view/footer.html'"></div>
+        </div>        
+        
+* exibindo tela de carregamento
+
+        <div class="jumbotron" ng-show="loading">
+            Carregando........ aguarde................
+        </div>        
