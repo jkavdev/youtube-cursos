@@ -14,6 +14,7 @@
             <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
             <th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
             <th>Operadora</th>
+            <th>Preço</th>
             <th>Data</th>
             <th></th>
         </tr>
@@ -23,6 +24,7 @@
             <td><a href="#!/detalhesContato/{{contato.id + 1}}">{{contato.nome | name}}</a></td>
             <td>{{contato.telefone}}</td>
             <td>{{contato.operadora.nome | uppercase}}</td>
+            <td>{{contato.operadora.precoComImposto | currency}}</td>
             <td>{{contato.data | date: 'dd/MM/yyyy HH:mm'}}</td>
             <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
         </tr>
