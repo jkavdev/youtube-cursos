@@ -25,20 +25,23 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($s
         $scope.contatos = contatos.filter(function (contato) {
             if (!contato.selecionado) return contato;
         });
+        $scope.verificarContatoSelecionado($scope.contatos);
     };
-    $scope.isContatoSelecionado = function (contatos) {
-        return contatos.some(function (contato) {
+    var counter = 0;
+    $scope.verificarContatoSelecionado = function (contatos) {
+        console.log("counter selecionado mais: ", counter++);
+        console.log("counter selecionado mais: ", contatos);
+        $scope.hasContatoSelecionado = contatos.some(function (contato) {
+            console.log("counter selecionado mais: ", contato.selecionado);
             return contato.selecionado;
         });
     };
     $scope.ordenarPor = function (campo) {
         $scope.criterioDeOrdenacao = campo;
+
         $scope.direcaoDeOrdenacao = !$scope.direcaoDeOrdenacao;
     };
-
-    var counter = 0;
     var calcularImposto = function (preco) {
-        console.log("counter: ", counter++);
         var imposto = 1.2;
         return preco * imposto;
     };

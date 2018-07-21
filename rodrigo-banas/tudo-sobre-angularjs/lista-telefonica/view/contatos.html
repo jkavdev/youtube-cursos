@@ -5,7 +5,8 @@
         {{error}}
     </ui-alert>
 
-    <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?" />
+    <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?"
+        ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}"/>
 
     <table class="table table-striped" ng-show="contatos.length > 0">
         <tr>
@@ -19,13 +20,13 @@
             <th></th>
         </tr>
         <tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDeOrdenacao">
-            <td><input type="checkbox" ng-model="contato.selecionado" /></td>
-            <td>{{contato.serial}}</td>
-            <td><a href="#!/detalhesContato/{{contato.id + 1}}">{{contato.nome | name}}</a></td>
-            <td>{{contato.telefone}}</td>
-            <td>{{contato.operadora.nome | uppercase}}</td>
-            <td>{{contato.operadora.precoComImposto | currency}}</td>
-            <td>{{contato.data | date: 'dd/MM/yyyy HH:mm'}}</td>
+            <td><input type="checkbox" ng-model="contato.selecionado" ng-change="verificarContatoSelecionado(contatos)" /></td>
+            <td>{{::contato.serial}}</td>
+            <td><a href="#!/detalhesContato/{{contato.id + 1}}">{{::contato.nome | name}}</a></td>
+            <td>{{::contato.telefone}}</td>
+            <td>{{::contato.operadora.nome | uppercase}}</td>
+            <td>{{::contato.operadora.precoComImposto | currency}}</td>
+            <td>{{::contato.data | date: 'dd/MM/yyyy HH:mm'}}</td>
             <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
         </tr>
     </table>
@@ -33,7 +34,7 @@
     <hr />
 
     <a class="btn btn-info btn-block" href="#!/novoContato">Novo Contato</a>
-    <button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!isContatoSelecionado(contatos)" ng-if="contatos.length > 0">Apagar Contato</button>
+    <button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!hasContatoSelecionado" ng-if="contatos.length > 0">Apagar Contato</button>
     <a class="btn btn-dark btn-block" href="#!/accordions">Accordions</a>
 
 </div>
