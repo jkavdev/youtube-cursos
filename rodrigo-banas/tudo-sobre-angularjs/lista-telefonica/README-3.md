@@ -41,4 +41,31 @@
 
         <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que vc estah buscando?"
             ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}"/>
+            
+* Diferenca entre ngIf e ngShow
+
+* `ngIf` temos menos watchers e o tempo de resposta mais alto, demora mais 
+* `ngShow` temos mais watchers e o tempo de resposta e menos, demora menos 
+
+* mas se minha pagina contem muitos elementos o numero de watcher pode ficar muito grande, sendo
+* preferivel utilizar o `ngIf` com menos watchers
+
+* podemos ainda ter uma lazy-loading em recursos
+* com `ng-src` indicamos que o recurso estara pront apenas quando renderizado
+* se tivessemos utilizado apenas `src` o recurso seria carregado junto com a pagina 
+
+        <div ng-if="showImage">
+            <img ng-src="/img/github-mark.png" width="300" />
+        </div>
+
+* Utilizando o filter no controller
+* ao inves de utilizar um filter na view
+
+        <h3>{{app | upper}}</h3>
+        
+* podemos diminuir o acesso ao filter, realizando o filter no controller        
+
+        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, $filter) {
+            $scope.app = $filter('upper')("Lista Telefonica");
+        }            
 

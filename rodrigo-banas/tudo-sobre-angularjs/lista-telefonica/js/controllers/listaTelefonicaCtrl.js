@@ -1,5 +1,5 @@
-angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, contatos, contatosAPI, serialGenerator) {
-    $scope.app = "Lista Telefonica";
+angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, contatos, contatosAPI, serialGenerator, $filter) {
+    $scope.app = $filter('upper')("Lista Telefonica");
     $scope.contatos = contatos.data;
 
     console.log(contatos.config.url);

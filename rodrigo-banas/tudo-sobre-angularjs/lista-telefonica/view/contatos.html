@@ -1,4 +1,10 @@
 <div class="jumbotron">
+
+    <button class="btn btn-outline-primary" ng-click="showImage=!showImage">Show/Hide Image</button>
+    <div ng-if="showImage">
+        <img ng-src="/img/github-mark.png" width="300" />
+    </div>
+
     <h3>{{app}}</h3>
 
     <ui-alert title="Ops, acontenceu um problema!">
@@ -19,7 +25,8 @@
             <th>Data</th>
             <th></th>
         </tr>
-        <tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDeOrdenacao">
+        <tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" 
+            ng-repeat="contato in contatos | limitTo:10 | filter:{nome: criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDeOrdenacao track by contato.id">
             <td><input type="checkbox" ng-model="contato.selecionado" ng-change="verificarContatoSelecionado(contatos)" /></td>
             <td>{{::contato.serial}}</td>
             <td><a href="#!/detalhesContato/{{contato.id + 1}}">{{::contato.nome | name}}</a></td>
