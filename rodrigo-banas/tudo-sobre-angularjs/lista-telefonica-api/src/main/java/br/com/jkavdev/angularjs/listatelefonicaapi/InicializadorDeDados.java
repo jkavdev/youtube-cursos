@@ -42,8 +42,20 @@ public class InicializadorDeDados implements CommandLineRunner {
         contatoRepository.findAll()
             .forEach(System.out::println);
 
+        cachingTest();
+
         System.out.printf("Pronto.....................................................................................");
+    }
 
-
+    public void cachingTest(){
+        System.out.println(".... Buscando operadoras");
+        System.out.println(".... First Select");
+        System.out.println(operadoraRepository.findAll());
+        System.out.println(".... Others Selects");
+        System.out.println(operadoraRepository.findAll());
+        System.out.println(operadoraRepository.findAll());
+        System.out.println(operadoraRepository.findAll());
+        System.out.println(operadoraRepository.findAll());
+        System.out.println(operadoraRepository.findAll());
     }
 }
