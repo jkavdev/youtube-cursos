@@ -57,5 +57,21 @@ public class InicializadorDeDados implements CommandLineRunner {
         System.out.println(operadoraRepository.findAll());
         System.out.println(operadoraRepository.findAll());
         System.out.println(operadoraRepository.findAll());
+
+        System.out.println(".... Buscando operadora por ID");
+        System.out.println(".... First Select");
+        System.out.println(operadoraRepository.findById(1).get());
+        System.out.println(operadoraRepository.findById(2).get());
+        System.out.println(operadoraRepository.findById(3).get());
+        System.out.println(".... Others Selects");
+        System.out.println(operadoraRepository.findById(1).get());
+        System.out.println(operadoraRepository.findById(1).get());
+        System.out.println(operadoraRepository.findById(1).get());
+        System.out.println(operadoraRepository.findById(2).get());
+        System.out.println(operadoraRepository.findById(2).get());
+        System.out.println(operadoraRepository.findById(2).get());
+        System.out.println(operadoraRepository.findById(3).get());
+        System.out.println(operadoraRepository.findById(3).get());
+        System.out.println(operadoraRepository.findById(3).get());
     }
 }
